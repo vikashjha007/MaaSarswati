@@ -1,0 +1,1115 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Maa Krupa Sarswati Pooja Samiti 2026</title>
+
+  <!-- Firebase SDKs -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/8.10.1/firebase-app.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/8.10.1/firebase-firestore.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/8.10.1/firebase-storage.min.js"></script>
+
+  <!-- Font Awesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"/>
+
+  <style>
+    :root {
+      --royal-gold: #d4af37;  /* metallic gold */ /* [web:43][web:66] */
+      --bright-gold: #ffd700; /* bright gold */   /* [web:60] */
+      --soft-white: #fffff0;  /* ivory */         /* [web:62][web:65] */
+      --text-dark: #1f2937;
+    }
+
+    * {box-sizing: border-box; margin: 0; padding: 0;}
+    body {
+      font-family: 'Arial', sans-serif;
+      background: radial-gradient(circle at top, #ffffff 0%, var(--soft-white) 45%, #f8f1da 100%);
+      min-height: 100vh;
+      color: var(--text-dark);
+    }
+
+    .header {
+      background: linear-gradient(135deg, #866118 0%, var(--royal-gold) 40%, var(--bright-gold) 100%);
+      color: white;
+      padding: 1.25rem 1rem 1.75rem;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.18);
+      text-align: center;
+      border-bottom: 3px solid rgba(255,255,255,0.6);
+    }
+    .header h1 {
+      font-size: 2.1rem;
+      margin-bottom: 0.4rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+    .header p {
+      color: #fff9d7;
+      font-weight: 500;
+    }
+
+    .nav-container {
+      background: rgba(255,255,255,0.95);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+      border-bottom: 1px solid rgba(212,175,55,0.3);
+      backdrop-filter: blur(4px);
+    }
+    .nav-buttons {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0.75rem 1rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      justify-content: center;
+    }
+    .nav-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.6rem 1.1rem;
+      border: 1px solid rgba(212,175,55,0.5);
+      border-radius: 999px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      background: #fdfaf2;
+      color: #4b5563;
+    }
+    .nav-btn.active {
+      background: linear-gradient(135deg, var(--royal-gold), var(--bright-gold));
+      color: white;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.22);
+    }
+    .nav-btn:not(.active):hover {
+      background: #fff9e0;
+      color: #8b5a00;
+      transform: translateY(-1px);
+    }
+
+    .page-container {max-width: 1200px; margin: 0 auto; padding: 2rem 1rem;}
+    .page {display: none;}
+    .page.active {display: block;}
+
+    .card {
+      background: linear-gradient(135deg, #ffffff 0%, #fffdf4 40%, #fbf5df 100%);
+      border-radius: 1rem;
+      padding: 2rem;
+      box-shadow: 0 12px 25px rgba(0,0,0,0.15);
+      margin-bottom: 2rem;
+      border: 1px solid rgba(212,175,55,0.4);
+    }
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+    .card-header h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text-dark);
+    }
+
+    .welcome-card {text-align: center; margin-bottom: 2rem;}
+    .page-grid {display: grid; grid-template-columns: repeat(auto-fit, minmax(250px,1fr)); gap: 1.5rem; margin-top: 2rem;}
+    .page-card {
+      background: radial-gradient(circle at top, #fffcec 0%, #fff7da 40%, #f1d998 100%);
+      padding: 2rem;
+      border-radius: 1rem;
+      color: #4b2d0f;
+      cursor: pointer;
+      transform: scale(1);
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      border: 1px solid rgba(212,175,55,0.5);
+    }
+    .page-card:hover {transform: translateY(-4px) scale(1.02);}
+    .page-card i {font-size: 2rem; margin-bottom: 1rem;}
+
+    .form-grid {display: grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap: 1rem; padding: 1rem; background: #f8f5eb; border-radius: 0.75rem; margin-bottom: 1.5rem; border: 1px dashed rgba(212,175,55,0.6);}
+    .form-group {display: flex; flex-direction: column; gap: 1rem;}
+    .form-input {
+      padding: 0.75rem;
+      border: 1px solid #d1d5db;
+      border-radius: 0.5rem;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      background: #fffdfa;
+    }
+    .form-input:focus {
+      outline: none;
+      border-color: var(--royal-gold);
+      box-shadow: 0 0 0 2px rgba(212,175,55,0.35);
+    }
+
+    .file-upload {
+      border: 2px dashed rgba(212,175,55,0.7);
+      border-radius: 0.75rem;
+      padding: 2rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      background: #fffcf3;
+    }
+    .file-upload:hover {
+      border-color: var(--bright-gold);
+      background: #fff6dd;
+    }
+    .file-upload input {display: none;}
+
+    .btn {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.65rem 1.1rem;
+      border: none;
+      border-radius: 999px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #1f9d55, #15803d);
+      color: white;
+    }
+    .btn-secondary {
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      color: white;
+    }
+    .btn-accent {
+      background: linear-gradient(135deg, #7c3aed, #6d28d9);
+      color: white;
+    }
+    .btn-danger {
+      background: linear-gradient(135deg, #b91c1c, #dc2626);
+      color: white;
+    }
+    .btn:hover {
+      box-shadow: 0 4px 10px rgba(0,0,0,0.18);
+      transform: translateY(-1px);
+    }
+
+    .table-container {overflow-x: auto; margin: 1rem 0;}
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      border-radius: 0.75rem;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.12);
+      overflow: hidden;
+    }
+    .data-table th {
+      background: linear-gradient(135deg, #fff8dc, #f2d889);
+      padding: 0.9rem 1rem;
+      text-align: left;
+      font-weight: 600;
+      color: #4b2d0f;
+      border-bottom: 1px solid rgba(212,175,55,0.3);
+    }
+    .data-table td {
+      padding: 0.8rem 1rem;
+      border-top: 1px solid #e5e7eb;
+      background: #fffcf6;
+    }
+    .data-table tr:nth-child(even) td {background: #fff9ef;}
+    .data-table tr:hover td {background: #fff4dd;}
+
+    .total-display {
+      background: linear-gradient(135deg, var(--royal-gold), var(--bright-gold));
+      color: #3b2a07;
+      padding: 1.4rem;
+      border-radius: 0.75rem;
+      text-align: center;
+      margin-top: 1.5rem;
+      border: 1px solid rgba(255,255,255,0.8);
+      box-shadow: 0 6px 14px rgba(0,0,0,0.2);
+    }
+    .total-display h3 {font-size: 1.1rem; margin-bottom: 0.4rem;}
+    .total-display .amount {font-size: 1.9rem; font-weight: 800;}
+
+    .member-grid {display: grid; grid-template-columns: repeat(auto-fill, minmax(250px,1fr)); gap: 1.5rem; margin-top: 1.5rem;}
+    .member-card {
+      background: #fffdf6;
+      border: 1px solid rgba(212,175,55,0.5);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    .member-card:hover {box-shadow: 0 10px 20px rgba(0,0,0,0.22); transform: translateY(-2px);}
+    .member-photo {
+      width: 80px; height: 80px; border-radius: 50%; object-fit: cover; margin: 0 auto 1rem;
+      border: 3px solid var(--royal-gold);
+    }
+    .member-placeholder {
+      width: 80px; height: 80px; border-radius: 50%;
+      background: #f5e9c8;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 1rem;
+      font-size: 1.5rem; color: #6b7280;
+      border: 2px solid rgba(212,175,55,0.8);
+    }
+
+    .delete-btn {
+      position: absolute; top: 0.5rem; right: 0.5rem;
+      background: white; border: none; border-radius: 50%;
+      width: 2rem; height: 2rem; display: flex; align-items: center; justify-content: center;
+      cursor: pointer; opacity: 0; transition: opacity 0.3s ease;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      color: #b91c1c;
+    }
+    .member-card:hover .delete-btn {opacity: 1;}
+
+    .image-grid {display: grid; grid-template-columns: repeat(auto-fill, minmax(200px,1fr)); gap: 1rem; margin-top: 1.5rem;}
+    .image-item {
+      position: relative; aspect-ratio: 1;
+      border-radius: 0.75rem; overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.18);
+      border: 1px solid rgba(212,175,55,0.6);
+      background: #fffaf0;
+    }
+    .image-item img {width: 100%; height: 100%; object-fit: cover; cursor: pointer;}
+
+    .image-item .delete-btn {
+      top: 0.5rem; right: 0.5rem;
+      background: rgba(185,28,28,0.95);
+      color: white;
+    }
+
+    .modal {
+      display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.8); z-index: 1000;
+      justify-content: center; align-items: center; padding: 1rem;
+    }
+    .modal.active {display: flex;}
+    .modal-content {position: relative; max-width: 90vw; max-height: 90vh;}
+    .modal img {max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 0.5rem;}
+    .modal-close {
+      position: absolute; top: 1rem; right: 1rem;
+      background: white; border: none; border-radius: 50%;
+      width: 2.5rem; height: 2.5rem; display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+    }
+    .modal-info {
+      position: absolute; bottom: 1rem; left: 1rem;
+      background: rgba(255,255,255,0.9); padding: 0.5rem; border-radius: 0.5rem;
+    }
+
+    .empty-state {text-align: center; padding: 3rem; color: #6b7280;}
+    .empty-state i {font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;}
+
+    @media (max-width: 768px) {
+      .header h1 {font-size: 1.6rem;}
+      .nav-buttons {justify-content: center;}
+      .form-grid {grid-template-columns: 1fr;}
+      .page-grid {grid-template-columns: 1fr;}
+      .btn, .btn-primary, .btn-secondary, .btn-accent, .btn-danger {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.95rem;
+      }
+      .btn i {font-size: 1rem;}
+    }
+    @media (max-width: 480px) {
+      .btn, .btn-primary, .btn-secondary, .btn-accent, .btn-danger {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.95rem;
+      }
+      .btn i {font-size: 1rem;}
+    }
+  </style>
+</head>
+<body>
+<header class="header">
+  <h1>Maa Krupa Sarswati Pooja Samiti 2026</h1>
+  <i class="fas fa-om" style="font-size: 3rem; margin-bottom: 0.5rem;"></i>
+  <p>Jai Maa Sarswati!</p>
+</header>
+
+<nav class="nav-container" id="navigation" style="display: none;">
+  <div class="nav-buttons">
+    <button class="nav-btn" data-page="home"><i class="fas fa-home"></i><span>Home</span></button>
+    <button class="nav-btn" data-page="donations"><i class="fas fa-donate"></i><span>Donations</span></button>
+    <button class="nav-btn" data-page="expenses"><i class="fas fa-receipt"></i><span>Expenses</span></button>
+    <button class="nav-btn" data-page="members"><i class="fas fa-users"></i><span>Members</span></button>
+    <button class="nav-btn" data-page="gallery"><i class="fas fa-images"></i><span>Gallery</span></button>
+  </div>
+</nav>
+
+<div class="page-container">
+  <!-- Home -->
+  <div id="home" class="page active">
+    <div class="card welcome-card">
+      <i class="fas fa-om" style="font-size: 4rem; color: var(--royal-gold); margin-bottom: 1rem;"></i>
+      <h2 style="font-size: 2rem; margin-bottom: 1rem; color: #1f2937;">Welcome to Maa Krupa Sarswati Pooja Samiti 2026</h2>
+      <p style="font-size: 1.125rem; color: #6b7280; margin-bottom: 2rem;">Manage your Sarswati Mata Pooja activities with ease</p>
+      <div class="page-grid">
+        <div class="page-card" data-page="donations">
+          <i class="fas fa-donate"></i>
+          <h3>Donations</h3>
+          <p>Track all donations received</p>
+        </div>
+        <div class="page-card" data-page="expenses">
+          <i class="fas fa-receipt"></i>
+          <h3>Expenses</h3>
+          <p>Manage pooja expenses</p>
+        </div>
+        <div class="page-card" data-page="members">
+          <i class="fas fa-users"></i>
+          <h3>Members</h3>
+          <p>Member info</p>
+        </div>
+        <div class="page-card" data-page="gallery">
+          <i class="fas fa-images"></i>
+          <h3>Gallery</h3>
+          <p>Pooja & cultural photo gallery</p>
+        </div>
+        <div class="page-card" style="cursor: default;">
+          <i class="fas fa-user-circle" style="font-size: 4rem; margin-bottom: 1rem;"></i>
+          <h3 style="margin: 0; font-weight: 600; font-size: 1.25rem;">Developer Info</h3>
+          <h2 style="margin: 0.5rem 0 0 0; font-size: 1.5rem; font-weight: 700;">Vikash Jha</h2>
+          <p style="font-size: 1rem; margin-top: 0.5rem;">
+            <a href="mailto:vikashjha9137@gmail.com" style="color: #4b5563; text-decoration: none;">vikashjha9137@gmail.com</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Donations -->
+  <div id="donations" class="page">
+    <div class="card">
+      <div class="card-header">
+        <i class="fas fa-donate" style="color: #15803d; font-size: 1.5rem;"></i>
+        <h2>Donation Management</h2>
+      </div>
+      <div class="form-grid" id="add-donation">
+        <input type="text" class="form-input" id="roomNumber" placeholder="Room / House Number">
+        <input type="text" class="form-input" id="donorName" placeholder="Donor Name">
+        <select class="form-input" id="paymentMode">
+          <option value="cash">Cash</option>
+          <option value="online">Online</option>
+        </select>
+        <input type="number" class="form-input" id="donationAmount" placeholder="Amount (₹)">
+        <button class="btn btn-primary" onclick="addDonation()">
+          <i class="fas fa-plus"></i>
+          Add Donation
+        </button>
+      </div>
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Room / House No.</th>
+              <th>Name</th>
+              <th>Amount (₹)</th>
+            </tr>
+          </thead>
+          <tbody id="donationsTable"></tbody>
+        </table>
+      </div>
+      <div class="total-display" id="totalDonations">
+        <h3>Total Donations Received</h3>
+        <div class="amount">₹0</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Expenses -->
+  <div id="expenses" class="page">
+    <div class="card">
+      <div class="card-header">
+        <i class="fas fa-receipt" style="color: #2563eb; font-size: 1.5rem;"></i>
+        <h2>Expense Management</h2>
+      </div>
+      <div class="form-grid" style="grid-template-columns: 1fr 1fr;" id="add-expense">
+        <div class="form-group">
+          <input type="text" class="form-input" id="expenseName" placeholder="Expense Name">
+          <input type="number" class="form-input" id="expenseAmount" placeholder="Amount (₹)">
+        </div>
+        <div class="form-group">
+          <div class="file-upload" onclick="document.getElementById('expenseFile').click()">
+            <input type="file" id="expenseFile" accept="image/*,application/pdf,.doc,.docx" onchange="handleExpenseFile(this)">
+            <i class="fas fa-upload" style="font-size: 2rem; color: #6b7280; margin-bottom: 0.5rem;"></i>
+            <p id="expenseFileName">Click to upload attachment</p>
+          </div>
+          <button class="btn btn-secondary" onclick="addExpense()">
+            <i class="fas fa-plus"></i>
+            Add Expense
+          </button>
+        </div>
+      </div>
+      <div id="expensesList"></div>
+      <div class="total-display" id="totalExpenses">
+        <h3>Total Expenses</h3>
+        <div class="amount">₹0</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Members -->
+  <div id="members" class="page">
+    <div class="card">
+      <div class="card-header">
+        <i class="fas fa-users" style="color: #7c3aed; font-size: 1.5rem;"></i>
+        <h2>Members Management</h2>
+      </div>
+      <div class="form-grid" style="grid-template-columns: 1fr 1fr;" id="add-member">
+        <div class="form-group">
+          <input type="text" class="form-input" id="memberName" placeholder="Member Name">
+          <input type="text" class="form-input" id="memberContact" placeholder="Contact Number">
+        </div>
+        <div class="form-group">
+          <div class="file-upload" onclick="document.getElementById('memberPhoto').click()">
+            <input type="file" id="memberPhoto" accept="image/*" onchange="handleMemberPhoto(this)">
+            <div id="photoPreview">
+              <i class="fas fa-camera" style="font-size: 2rem; color: #6b7280; margin-bottom: 0.5rem;"></i>
+              <p id="photoFileName">Click to upload photo</p>
+            </div>
+          </div>
+          <button class="btn btn-accent" onclick="addMember()">
+            <i class="fas fa-plus"></i>
+            Add Member
+          </button>
+        </div>
+      </div>
+      <div class="member-grid" id="membersGrid"></div>
+      <div id="membersEmpty" class="empty-state">
+        <i class="fas fa-users"></i>
+        <p>No members added yet</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Gallery -->
+  <div id="gallery" class="page">
+    <div class="card">
+      <div class="card-header">
+        <i class="fas fa-images" style="color: var(--royal-gold); font-size: 1.5rem;"></i>
+        <h2>Image Gallery</h2>
+      </div>
+      <div class="file-upload btn-upload-image" style="margin-bottom: 2rem;" onclick="document.getElementById('galleryImages').click()">
+        <input type="file" id="galleryImages" accept="image/*" multiple onchange="handleGalleryImages(this)">
+        <i class="fas fa-camera" style="font-size: 3rem; color: #6b7280; margin-bottom: 1rem;"></i>
+        <h3 style="margin-bottom: 0.5rem; color: #374151;">Upload Pooja & Cultural Photos</h3>
+        <p style="color: #6b7280;">Click to select multiple images</p>
+      </div>
+      <div class="image-grid" id="imageGrid"></div>
+      <div id="galleryEmpty" class="empty-state">
+        <i class="fas fa-images"></i>
+        <p>No images uploaded yet</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal" id="imageModal">
+  <div class="modal-content">
+    <img id="modalImage" src="" alt="">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-info" id="modalInfo">
+      <p id="modalImageName"></p>
+      <p id="modalImageDate"></p>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ===== Firebase Init =====
+  var firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_PROJECT_ID.appspot.com",
+    messagingSenderId: "YOUR_SENDER_ID",
+    appId: "YOUR_APP_ID"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+
+  // ===== Cloudinary Config =====
+  const CLOUDINARY_UPLOAD_URL = "https://api.cloudinary.com/v1_1/YOUR_CLOUD_NAME/upload";
+  const CLOUDINARY_UPLOAD_PRESET = "YOUR_UNSIGNED_PRESET";
+
+  function uploadToCloudinary(file, callback) {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
+    fetch(CLOUDINARY_UPLOAD_URL, { method: "POST", body: formData })
+      .then(res => res.json())
+      .then(data => {
+        if (data.secure_url) {
+          callback(
+            data.secure_url,
+            data.original_filename || file.name,
+            data.bytes || file.size
+          );
+        } else {
+          console.error("Cloudinary upload error:", data);
+          callback(null, null, null);
+        }
+      })
+      .catch(err => {
+        console.error("Cloudinary upload error:", err);
+        callback(null, null, null);
+      });
+  }
+
+  // ===== Global =====
+  let donations = [];
+  let expenseAttachmentFile = null;
+  let galleryImages = [];
+  let memberPhotoFile = null;
+
+  function formatFileSize(bytes) {
+    if (bytes === 0 || !bytes) return "0 B";
+    const k = 1024;
+    const sizes = ["B", "KB", "MB", "GB"];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".nav-btn").forEach(btn => {
+      btn.addEventListener("click", function () {
+        const pageId = this.getAttribute("data-page");
+        if (!pageId) return;
+        const pageEl = document.getElementById(pageId);
+        if (!pageEl) return;
+        document.querySelectorAll(".page").forEach(page => page.classList.remove("active"));
+        pageEl.classList.add("active");
+        document.querySelectorAll(".nav-btn").forEach(btn2 => btn2.classList.remove("active"));
+        this.classList.add("active");
+        document.getElementById("navigation").style.display = (pageId !== "home") ? "block" : "none";
+      });
+    });
+
+    document.querySelectorAll(".page-card").forEach(card => {
+      card.addEventListener("click", function () {
+        const pageId = this.getAttribute("data-page");
+        if (!pageId) return;
+        const pageEl = document.getElementById(pageId);
+        if (!pageEl) return;
+        document.querySelectorAll(".page").forEach(page => page.classList.remove("active"));
+        pageEl.classList.add("active");
+        document.querySelectorAll(".nav-btn").forEach(btn2 => btn2.classList.remove("active"));
+        const navBtn = document.querySelector(`.nav-btn[data-page="${pageId}"]`);
+        if (navBtn) navBtn.classList.add("active");
+        document.getElementById("navigation").style.display = (pageId !== "home") ? "block" : "none";
+      });
+    });
+
+    initializeGalleryEvents();
+    fetchVisibilityFlag();
+    loadDonations();
+    loadExpenses();
+    loadMembers();
+    loadGallery();
+  });
+
+  // ===== Hide/Show Flag =====
+  function fetchVisibilityFlag() {
+    const docId = "HideShow";
+    db.collection("HideShowFlag").doc(docId).get()
+      .then(doc => {
+        const flag = doc.exists ? doc.data().Flag : true;
+        applyVisibility(flag);
+      })
+      .catch(() => applyVisibility(true));
+  }
+
+  function applyVisibility(flag) {
+    const displayStyle = flag ? "inline-block" : "none";
+    document.querySelectorAll("#add-donation").forEach(el => el.style.display = displayStyle);
+    document.querySelectorAll("#btn-delete-donation").forEach(el => el.style.display = displayStyle);
+    document.querySelectorAll("#add-member").forEach(el => el.style.display = displayStyle);
+    document.querySelectorAll("#btn-delete-member").forEach(el => el.style.display = displayStyle);
+    document.querySelectorAll("#add-expense").forEach(el => el.style.display = displayStyle);
+    document.querySelectorAll("#btn-delete-expense").forEach(el => el.style.display = displayStyle);
+    document.querySelectorAll(".btn-upload-image").forEach(el => el.style.display = displayStyle);
+  }
+
+  // ===== Donations =====
+  function addDonation() {
+    const roomNumber = document.getElementById("roomNumber").value.trim();
+    const name = document.getElementById("donorName").value.trim();
+    const paymentMode = document.getElementById("paymentMode").value;
+    const amount = parseFloat(document.getElementById("donationAmount").value);
+
+    if (roomNumber && name && amount) {
+      db.collection("donations").add({
+        roomNumber,
+        name,
+        paymentMode,
+        amount,
+        date: new Date().toLocaleDateString()
+      }).then(() => {
+        clearDonationForm();
+        loadDonations();
+      });
+    } else {
+      alert("Please fill all fields for donation.");
+    }
+  }
+
+  function loadDonations() {
+    db.collection("donations").get().then(q => {
+      donations = [];
+      q.forEach(doc => {
+        let d = doc.data();
+        d.id = doc.id;
+        donations.push(d);
+      });
+      donations.sort((a, b) => parseInt(a.roomNumber) - parseInt(b.roomNumber));
+      renderDonations();
+    });
+  }
+
+  function renderDonations() {
+    const tableBody = document.getElementById("donationsTable");
+    const totalAmount = donations.reduce((sum, d) => sum + (d.amount || 0), 0);
+    tableBody.innerHTML = donations.map(donation => `
+      <tr>
+        <td>${donation.roomNumber}</td>
+        <td>${donation.name}</td>
+        <td><strong>₹${(donation.amount || 0).toLocaleString()}</strong></td>
+      </tr>
+    `).join("");
+    document.querySelector("#totalDonations .amount").textContent = `₹${totalAmount.toLocaleString()}`;
+  }
+
+  function clearDonationForm() {
+    document.getElementById("roomNumber").value = "";
+    document.getElementById("donorName").value = "";
+    document.getElementById("paymentMode").value = "cash";
+    document.getElementById("donationAmount").value = "";
+  }
+
+  // ===== Expenses =====
+  function handleExpenseFile(input) {
+    expenseAttachmentFile = input.files[0] || null;
+    document.getElementById("expenseFileName").textContent = expenseAttachmentFile
+      ? `${expenseAttachmentFile.name} (${formatFileSize(expenseAttachmentFile.size)})`
+      : "Click to upload attachment";
+  }
+
+  function addExpense() {
+    const name = document.getElementById("expenseName").value.trim();
+    const amount = parseFloat(document.getElementById("expenseAmount").value);
+
+    if (!name || !amount) {
+      alert("please fill expense name and amount।");
+      return;
+    }
+
+    if (expenseAttachmentFile) {
+      uploadToCloudinary(expenseAttachmentFile, (url, fname, fsize) => {
+        if (url) saveExpense(name, amount, url, fname, fsize);
+        else alert("Attachment upload failed!");
+      });
+    } else {
+      saveExpense(name, amount, null, null, null);
+    }
+  }
+
+  function saveExpense(name, amount, attachmentURL, attachmentName, attachmentSize) {
+    db.collection("expenses").add({
+      name,
+      amount,
+      date: new Date().toLocaleDateString(),
+      attachmentURL: attachmentURL || null,
+      attachmentName: attachmentName || null,
+      attachmentSize: attachmentSize || null
+    }).then(() => {
+      alert("sucessfully added expense!");
+      clearExpenseForm();
+      loadExpenses();
+    }).catch(e => alert("व्यय जोड़ने में त्रुटि: " + e.message));
+  }
+
+  function clearExpenseForm() {
+    document.getElementById("expenseName").value = "";
+    document.getElementById("expenseAmount").value = "";
+    document.getElementById("expenseFileName").textContent = "Click to upload attachment";
+    document.getElementById("expenseFile").value = "";
+    expenseAttachmentFile = null;
+  }
+
+  function loadExpenses() {
+    db.collection("expenses").orderBy("amount", "desc").get()
+      .then(querySnapshot => {
+        const expenses = [];
+        querySnapshot.forEach(doc => {
+          let data = doc.data();
+          data.id = doc.id;
+          expenses.push(data);
+        });
+        renderExpenses(expenses);
+      })
+      .catch(error => {
+        alert("Error loading expenses: " + error.message);
+      });
+  }
+
+  function renderExpenses(expenses) {
+    const container = document.getElementById("expensesList");
+    const total = expenses.reduce((sum, exp) => sum + (exp.amount || 0), 0);
+
+    container.innerHTML = expenses.map(expense => `
+      <div style="
+        border: 1px solid #e5e7eb;
+        border-radius: 10px;
+        padding: 1rem 1.5rem;
+        margin-bottom: 1rem;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 1rem;
+        font-family: Arial, sans-serif;
+        background: #fff;
+      ">
+        <div style="flex-grow: 1; min-width: 180px;">
+          <h3 style="margin: 0 0 0.25rem 0; color: #dc2626;">${expense.name || "Unknown Expense"}</h3>
+          <div style="font-size: 0.9rem; color: #6b7280;">
+            Date: ${expense.date || "N/A"}
+          </div>
+          ${expense.attachmentURL ? `
+            <div style="margin-top: 0.25rem;">
+              Attachment: ${expense.attachmentName || "Attachment"} (${formatFileSize(expense.attachmentSize || 0)})
+              <button 
+                onclick="window.open('${expense.attachmentURL}', '_blank')" 
+                style="background: #3b82f6; color: white; border: none; border-radius: 5px; padding: 0.2rem 0.6rem; font-size: 0.8rem; cursor: pointer; margin-left: 0.5rem;">
+                View
+              </button>
+            </div>
+          ` : ""}
+        </div>
+        <div style="min-width: 80px; font-weight: 700; color: #059669; font-size: 1.2rem; text-align: right;">
+          ₹${(expense.amount || 0).toLocaleString()}
+        </div>
+        <button id="btn-delete-expense"
+          onclick="deleteExpense('${expense.id}')" 
+          style="background: #ef4444; color: white; border: none; padding: 0.4rem 0.8rem; border-radius: 8px; cursor: pointer; flex-shrink: 0; display:none;">
+          Delete
+        </button>
+      </div>
+    `).join("");
+
+    document.querySelector("#totalExpenses .amount").textContent = `₹${total.toLocaleString()}`;
+  }
+
+  function deleteExpense(id) {
+    if (confirm("क्या आप इस व्यय को हटाना चाहते हैं?")) {
+      db.collection("expenses").doc(id).delete()
+        .then(() => {
+          alert("sucessfully removed expense!");
+          loadExpenses();
+        })
+        .catch(err => alert("Error deleting expense: " + err.message));
+    }
+  }
+
+  // ===== Gallery =====
+  async function handleGalleryImages(input) {
+    const files = Array.from(input.files);
+    if (files.length === 0) {
+      alert("कोई फाइल चयनित नहीं है।");
+      return;
+    }
+
+    const validTypes = ["image/jpeg", "image/jpg", "image/png", "image/gif", "image/webp"];
+    const invalidFiles = files.filter(file => !validTypes.includes(file.type));
+    if (invalidFiles.length > 0) {
+      alert("कृपया केवल image फाइलें चुनें (JPG, PNG, GIF, WebP)");
+      return;
+    }
+
+    let successCount = 0;
+    let errors = [];
+    const totalFiles = files.length;
+
+    files.forEach((file, index) => {
+      uploadToCloudinary(file, async (url, fname, fsize) => {
+        if (url) {
+          try {
+            await db.collection("gallery").add({
+              url: url,
+              name: file.name,
+              type: file.type,
+              size: file.size,
+              date: new Date().toLocaleDateString("hi-IN"),
+              uploadDate: new Date()
+            });
+            successCount++;
+          } catch {
+            errors.push(`${file.name}: DB error`);
+          }
+        } else {
+          errors.push(`${file.name}: upload failed`);
+        }
+
+        if (index === totalFiles - 1) {
+          if (successCount > 0 && errors.length === 0) {
+            alert("सभी फोटो सफलतापूर्वक अपलोड की गईं!");
+          } else if (successCount > 0) {
+            alert(`${successCount}/${totalFiles} फोटो अपलोड हुईं।
+
+असफल:
+${errors.join("
+")}`);
+          } else {
+            alert(`कोई भी फोटो अपलोड नहीं हुई:
+${errors.join("
+")}`);
+          }
+          input.value = "";
+          loadGallery();
+        }
+      });
+    });
+  }
+
+  async function loadGallery() {
+    try {
+      const snapshot = await db.collection("gallery").orderBy("uploadDate", "asc").get();
+      galleryImages = [];
+      snapshot.forEach(doc => galleryImages.push({ id: doc.id, ...doc.data() }));
+      renderGallery(galleryImages);
+    } catch {
+      try {
+        const snapshot = await db.collection("gallery").get();
+        galleryImages = [];
+        snapshot.forEach(doc => galleryImages.push({ id: doc.id, ...doc.data() }));
+        galleryImages.sort((a, b) => {
+          const dateA = a.uploadDate ? new Date(a.uploadDate.toDate()) : new Date();
+          const dateB = b.uploadDate ? new Date(b.uploadDate.toDate()) : new Date();
+          return dateB - dateA;
+        });
+        renderGallery(galleryImages);
+      } catch (fallbackError) {
+        alert("गैलरी लोड करने में त्रुटि: " + fallbackError.message);
+        renderGallery([]);
+      }
+    }
+  }
+
+  function renderGallery(images) {
+    const container = document.getElementById("imageGrid");
+    const emptyMsg = document.getElementById("galleryEmpty");
+    if (!container) return;
+
+    if (!images || images.length === 0) {
+      container.innerHTML = "";
+      if (emptyMsg) emptyMsg.style.display = "block";
+      return;
+    }
+
+    if (emptyMsg) emptyMsg.style.display = "none";
+
+    container.innerHTML = images.map(img => `
+      <div class="image-item">
+        <button class="delete-btn" onclick="deleteImage('${img.id}')" title="फोटो हटाएं">
+          <i class="fas fa-times"></i>
+        </button>
+        <img 
+          src="${img.url}" 
+          alt="${img.name || "Gallery Image"}" 
+          onclick="showModal('${img.url}', '${img.name || ""}', '${img.date || ""}')" 
+          onerror="this.style.display='none'"
+          loading="lazy"
+        />
+      </div>
+    `).join("");
+  }
+
+  function deleteImage(id) {
+    if (!confirm("क्या आप वाकई इस फोटो को हटाना चाहते हैं?")) return;
+    db.collection("gallery").doc(id).delete()
+      .then(() => {
+        alert("तस्वीर सफलतापूर्वक हटाई गई।");
+        loadGallery();
+      })
+      .catch(error => alert("तस्वीर हटाने में त्रुटि: " + error.message));
+  }
+
+  function showModal(url, name, date) {
+    const modal = document.getElementById("imageModal");
+    const modalImage = document.getElementById("modalImage");
+    const modalImageName = document.getElementById("modalImageName");
+    const modalImageDate = document.getElementById("modalImageDate");
+    if (!modal || !modalImage) return;
+    modalImage.src = url;
+    if (modalImageName) modalImageName.textContent = name || "";
+    if (modalImageDate) modalImageDate.textContent = date || "";
+    modal.classList.add("active");
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeModal() {
+    const modal = document.getElementById("imageModal");
+    const modalImage = document.getElementById("modalImage");
+    if (!modal || !modalImage) return;
+    modal.classList.remove("active");
+    modalImage.src = "";
+    document.body.style.overflow = "auto";
+  }
+
+  function initializeGalleryEvents() {
+    const modal = document.getElementById("imageModal");
+    if (modal) {
+      modal.addEventListener("click", (e) => {
+        if (e.target === modal) closeModal();
+      });
+    }
+    const closeBtn = document.querySelector(".modal-close");
+    if (closeBtn) closeBtn.addEventListener("click", closeModal);
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && modal && modal.classList.contains("active")) closeModal();
+    });
+  }
+
+  // ===== Members =====
+  function handleMemberPhoto(input) {
+    memberPhotoFile = input.files[0] || null;
+    const preview = document.getElementById("photoPreview");
+    const label = document.getElementById("photoFileName");
+    if (label && memberPhotoFile) {
+      label.textContent = memberPhotoFile.name;
+    }
+    if (preview && memberPhotoFile) {
+      preview.innerHTML = `
+        <img src="${URL.createObjectURL(memberPhotoFile)}" 
+             style="width:80px;height:80px;border-radius:50%;object-fit:cover;margin-bottom:0.5rem;">
+        <p id="photoFileName">${memberPhotoFile.name}</p>
+      `;
+    }
+  }
+
+  function addMember() {
+    const name = document.getElementById("memberName").value.trim();
+    const contact = document.getElementById("memberContact").value.trim();
+
+    if (!name) {
+      alert("कृपया सदस्य का नाम भरें।");
+      return;
+    }
+
+    if (memberPhotoFile) {
+      uploadToCloudinary(memberPhotoFile, (url, fname, fsize) => {
+        if (url) {
+          saveMember(name, contact, url, fname);
+        } else {
+          alert("फ़ोटो अपलोड में त्रुटि!");
+        }
+      });
+    } else {
+      saveMember(name, contact, null, null);
+    }
+  }
+
+  function saveMember(name, contact, photoURL, photoName) {
+    const memberData = {
+      name: name,
+      contact: contact || "",
+      date: new Date().toLocaleDateString(),
+      timestamp: new Date()
+    };
+    if (photoURL) {
+      memberData.photoURL = photoURL;
+      memberData.photoName = photoName;
+    }
+
+    db.collection("members").add(memberData)
+      .then(() => {
+        alert("सदस्य सफलतापूर्वक जोड़ा गया!");
+        clearMemberForm();
+        loadMembers();
+      })
+      .catch(error => {
+        alert("सदस्य जोड़ने में त्रुटि: " + error.message);
+      });
+  }
+
+  function clearMemberForm() {
+    document.getElementById("memberName").value = "";
+    document.getElementById("memberContact").value = "";
+    document.getElementById("memberPhoto").value = "";
+    memberPhotoFile = null;
+    document.getElementById("photoPreview").innerHTML = `
+      <i class="fas fa-camera" style="font-size: 2rem; color: #6b7280; margin-bottom: 0.5rem;"></i>
+      <p id="photoFileName">Click to upload photo</p>
+    `;
+  }
+
+  function loadMembers() {
+    db.collection("members").orderBy("timestamp", "asc").get()
+      .then((querySnapshot) => {
+        const members = [];
+        querySnapshot.forEach((doc) => {
+          let data = doc.data();
+          data.id = doc.id;
+          members.push(data);
+        });
+        renderMembers(members);
+      })
+      .catch((error) => {
+        alert("Error loading members: " + error.message);
+      });
+  }
+
+  function renderMembers(members) {
+    const membersGrid = document.getElementById("membersGrid");
+    const membersEmpty = document.getElementById("membersEmpty");
+
+    if (!members.length) {
+      membersGrid.innerHTML = "";
+      membersEmpty.style.display = "block";
+      return;
+    }
+
+    membersEmpty.style.display = "none";
+
+    membersGrid.innerHTML = members.map(member => `
+      <div class="member-card">
+        <button class="delete-btn btn-delete-member" style="display:none;" id="btn-delete-member" onclick="deleteMember('${member.id}')">
+          <i class="fas fa-times"></i>
+        </button>
+        ${member.photoURL
+          ? `<img src="${member.photoURL}" alt="${member.name}" class="member-photo" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+             <div class="member-placeholder" style="display: none;">
+               <i class="fas fa-user"></i>
+             </div>`
+          : `<div class="member-placeholder">
+               <i class="fas fa-user"></i>
+             </div>`
+        }
+        <h3 style="font-size: 1.125rem; font-weight: 600; margin: 0 0 0.5rem 0; color: #1f2937;">${member.name}</h3>
+        ${member.contact
+          ? `<p style="color: #6b7280; font-size: 0.875rem; margin: 0 0 0.5rem 0;">
+               <i class="fas fa-phone" style="margin-right: 0.25rem;"></i>${member.contact}
+             </p>`
+          : ""
+        }
+      </div>
+    `).join("");
+  }
+
+  function deleteMember(id) {
+    if (!confirm("क्या आप इस सदस्य को हटाना चाहते हैं?")) return;
+    db.collection("members").doc(id).delete()
+      .then(() => {
+        alert("सदस्य सफलतापूर्वक हटाया गया!");
+        loadMembers();
+      })
+      .catch(err => alert("सदस्य हटाने में त्रुटि: " + err.message));
+  }
+</script>
+</body>
+</html>
