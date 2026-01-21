@@ -528,20 +528,23 @@
 
 <script>
   // ===== Firebase Init =====
-  var firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_PROJECT_ID.appspot.com",
-    messagingSenderId: "YOUR_SENDER_ID",
-    appId: "YOUR_APP_ID"
-  };
+const firebaseConfig = {
+  apiKey: "AIzaSyDHCFp2U83R2htaKKz5ZTRAPLahh7lkcXE",
+  authDomain: "ganpati2025-da162.firebaseapp.com",
+  databaseURL: "https://ganpati2025-da162-default-rtdb.firebaseio.com",
+  projectId: "ganpati2025-da162",
+  storageBucket: "ganpati2025-da162.firebasestorage.appspot.com",
+  messagingSenderId: "198731408007",
+  appId: "1:198731408007:web:a61f4bf5b6fbcb83ae8e22",
+  measurementId: "G-043GNXQ86Q"
+};
+
   firebase.initializeApp(firebaseConfig);
   const db = firebase.firestore();
 
   // ===== Cloudinary Config =====
   const CLOUDINARY_UPLOAD_URL = "https://api.cloudinary.com/v1_1/YOUR_CLOUD_NAME/upload";
-  const CLOUDINARY_UPLOAD_PRESET = "YOUR_UNSIGNED_PRESET";
+  const CLOUDINARY_UPLOAD_PRESET = "Ganpati2025";
 
   function uploadToCloudinary(file, callback) {
     const formData = new FormData();
